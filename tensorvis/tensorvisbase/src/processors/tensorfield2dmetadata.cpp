@@ -27,6 +27,8 @@
  *
  *********************************************************************************/
 
+#pragma optimize("", off)
+
 #include <inviwo/tensorvisbase/processors/tensorfield2dmetadata.h>
 #include <inviwo/tensorvisbase/util/tensorutil.h>
 #include <inviwo/core/util/stringconversion.h>
@@ -130,3 +132,5 @@ void TensorField2DMetaData::process() {
 }
 
 }  // namespace inviwo
+
+#pragma optimize("", on)

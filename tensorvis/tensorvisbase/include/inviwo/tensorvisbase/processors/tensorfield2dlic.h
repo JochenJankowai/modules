@@ -27,8 +27,7 @@
  *
  *********************************************************************************/
 
-#ifndef IVW_TENSORFIELDTORGBA_H
-#define IVW_TENSORFIELDTORGBA_H
+#pragma once
 
 #include <inviwo/core/common/inviwo.h>
 #include <inviwo/core/ports/imageport.h>
@@ -37,13 +36,13 @@
 #include <inviwo/tensorvisbase/datastructures/tensorfield2d.h>
 #include <modules/opengl/shader/shaderutils.h>
 #include <inviwo/tensorvisbase/util/tensorfieldutil.h>
-#include <inviwo/core/properties/eventproperty.h>
-#include <inviwo/core/interaction/events/mouseevent.h>
+#include <inviwo/core/properties/boolproperty.h>
+#include <inviwo/core/properties/ordinalproperty.h>
 
 namespace inviwo {
 
-/** \docpage{org.inviwo.TensorFieldLIC, TensorFieldLIC}
- * ![](org.inviwo.<name>.png?classIdentifier=org.inviwo.TensorFieldLIC)
+/** \docpage{org.inviwo.TensorField2DLIC, Tensor Field 2D LIC}
+ * ![](org.inviwo.<name>.png?classIdentifier=org.inviwo.TensorField2DLIC)
  * Explanation of how to use the processor.
  *
  * ### Inports
@@ -57,16 +56,12 @@ namespace inviwo {
  *   * __<Prop2>__ <description>
  */
 
-/**
- * \class TensorFieldToRGBA
- * \brief VERY_BRIEFLY_DESCRIBE_THE_CLASS
- * DESCRIBE_THE_CLASS_FROM_A_DEVELOPER_PERSPECTIVE
- */
-class IVW_MODULE_TENSORVISBASE_API TensorFieldToRGBA : public Processor {
+class IVW_MODULE_TENSORVISBASE_API TensorField2DLIC : public Processor {
 public:
-    TensorFieldToRGBA();
-    virtual ~TensorFieldToRGBA() = default;
+    TensorField2DLIC();
+    virtual ~TensorField2DLIC() = default;
 
+    virtual void initializeResources() override;
     virtual void process() override;
 
     virtual const ProcessorInfo getProcessorInfo() const override;
@@ -74,16 +69,26 @@ public:
 
 private:
     TensorField2DInport inport_;
+    ImageInport noiseTexture_;
+    ImageInport imageInport_;
     ImageOutport outport_;
 
+    IntProperty samples_;
+    FloatProperty stepLength_;
+    BoolProperty normalizeVectors_;
+    BoolProperty intensityMapping_;
+    BoolProperty useRK4_;
+    BoolProperty majorMinor_;
+    FloatVec4Property backgroundColor_;
+
     Shader shader_;
+    Image tf_texture_;
 
-    EventProperty hover_;
-    DoubleMat2Property tensor_;
+    float minVal_{};
+    float maxVal_{};
+    float eigenValueRange_{};
 
-    void hoverAction(Event *e);
+    void updateEigenValues();
 };
 
 }  // namespace inviwo
-
-#endif  // IVW_TENSORFIELDTORGBA_H

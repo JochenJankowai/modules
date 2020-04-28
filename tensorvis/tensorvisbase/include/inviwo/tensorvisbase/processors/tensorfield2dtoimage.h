@@ -27,21 +27,20 @@
  *
  *********************************************************************************/
 
-#ifndef IVW_VECTORFIELDLIC_H
-#define IVW_VECTORFIELDLIC_H
+#pragma once
 
+#include <inviwo/tensorvisbase/tensorvisbasemoduledefine.h>
 #include <inviwo/core/common/inviwo.h>
-#include <inviwo/core/ports/imageport.h>
 #include <inviwo/core/processors/processor.h>
-#include <modules/tensorvisualization/tensorvisualizationmoduledefine.h>
-#include <modules/tensorvisualization/datastructures/tensorfield2d.h>
-#include <modules/opengl/shader/shaderutils.h>
-#include <modules/tensorvisualization/util/tensorfieldutil.h>
+#include <inviwo/core/ports/imageport.h>
+#include <inviwo/tensorvisbase/ports/tensorfieldport.h>
+#include <inviwo/core/properties/boolproperty.h>
+#include <inviwo/core/properties/optionproperty.h>
 
 namespace inviwo {
 
-/** \docpage{org.inviwo.VectorFieldLIC, VectorFieldLIC}
- * ![](org.inviwo.<name>.png?classIdentifier=org.inviwo.VectorFieldLIC)
+/** \docpage{org.inviwo.TensorField2DToImage, Tensor Field 2D To Image}
+ * ![](org.inviwo.TensorField2DToImage.png?classIdentifier=org.inviwo.TensorField2DToImage)
  * Explanation of how to use the processor.
  *
  * ### Inports
@@ -54,39 +53,23 @@ namespace inviwo {
  *   * __<Prop1>__ <description>.
  *   * __<Prop2>__ <description>
  */
-
-/**
- * \class VectorFieldLIC
- * \brief VERY_BRIEFLY_DESCRIBE_THE_CLASS
- * DESCRIBE_THE_CLASS_FROM_A_DEVELOPER_PERSPECTIVE
- */
-class IVW_MODULE_TENSORVISUALIZATION_API VectorFieldLIC : public Processor {
+class IVW_MODULE_TENSORVISBASE_API TensorField2DToImage : public Processor {
 public:
-    VectorFieldLIC();
-    virtual ~VectorFieldLIC() = default;
+    TensorField2DToImage();
+    virtual ~TensorField2DToImage() = default;
 
-    virtual void initializeResources() override;
     virtual void process() override;
 
     virtual const ProcessorInfo getProcessorInfo() const override;
     static const ProcessorInfo processorInfo_;
 
 private:
-    ImageInport vectorField_;
-    ImageInport noiseTexture_;
-    ImageInport imageInport_;
-    ImageOutport outport_;
+    TensorField2DInport tensorField2DInport_;
+    ImageOutport imageOutport_;
 
-    IntProperty samples_;
-    FloatProperty stepLength_;
-    BoolProperty normalizeVectors_;
-    BoolProperty intensityMapping_;
-    BoolProperty useRK4_;
+    OptionPropertySize_t imageContent_;
 
-    Shader shader_;
-    Image tf_texture_;
+    BoolProperty normalizeContent_;
 };
 
 }  // namespace inviwo
-
-#endif  // IVW_VECTORFIELDLIC_H

@@ -33,7 +33,6 @@
 uniform sampler2D tensorFieldColor;
 uniform sampler2D noiseTextureColor;
 uniform sampler2D imageInportColor;
-uniform sampler2D tf;
 uniform ImageParameters tensorFieldParameters;
 uniform ImageParameters noiseTextureParameters;
 
@@ -130,7 +129,7 @@ void main() {
     finalColor = clamp(finalColor, 0.0, 1.0);
 
     if (hasInputImage) {
-        finalColor = finalColor * texture(imageInportColor, texCoord_.xy);
+        finalColor = finalColor * texture(imageInportColor, newTexForTensorFieldSampling);
     }
 
     FragData0 = finalColor;

@@ -1,5 +1,7 @@
 #include <inviwo/tensorvisio/processors/flowguifilereader.h>
 #include <inviwo/core/datastructures/volume/volumeram.h>
+#include <inviwo/tensorvisbase/tensorvisbasemodule.h>
+#include <fstream>
 
 namespace inviwo {
 
@@ -9,7 +11,7 @@ const ProcessorInfo FlowGUIFileReader::processorInfo_{
     "Wito File Reader",              // Display name
     "Tensor",                        // Category
     CodeState::Experimental,         // Code state
-    Tags::CPU,                       // Tags
+    tag::OpenTensorVis | Tag::CPU,   // Tags
 };
 const ProcessorInfo FlowGUIFileReader::getProcessorInfo() const { return processorInfo_; }
 

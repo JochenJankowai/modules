@@ -3,6 +3,8 @@
 #include <inviwo/tensorvisbase/tensorvisbasemodule.h>
 #include <fstream>
 
+#include <fstream>
+
 namespace inviwo {
 
 // The Class Identifier has to be globally unique. Use a reverse DNS naming scheme

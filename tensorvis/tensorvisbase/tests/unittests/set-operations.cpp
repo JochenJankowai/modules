@@ -6,6 +6,10 @@
 
 #include <inviwo/tensorvisbase/util/misc.h>
 
+#include <vector>
+#include <list>
+#include <algorithm>
+
 namespace inviwo {
 TEST(TensorUtilTests, concatenateVectorSuccess) {
     std::vector<int> vec1;

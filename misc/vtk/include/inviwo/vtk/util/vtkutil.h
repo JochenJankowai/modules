@@ -64,7 +64,6 @@ inline const DataFormatBase* getFormatFromVtkId(int vtkTypeId, int bitSize) {
         case VTK_INT:
         case VTK_LONG:
         case VTK_LONG_LONG:
-        case VTK___INT64:
             return DataFormatBase::get(NumericType::SignedInteger, 1, bitSize);
 
         case VTK_UNSIGNED_CHAR:
@@ -72,7 +71,6 @@ inline const DataFormatBase* getFormatFromVtkId(int vtkTypeId, int bitSize) {
         case VTK_UNSIGNED_INT:
         case VTK_UNSIGNED_LONG:
         case VTK_UNSIGNED_LONG_LONG:
-        case VTK_UNSIGNED___INT64:
         case VTK_ID_TYPE:
             return DataFormatBase::get(NumericType::UnsignedInteger, 1, bitSize);
 

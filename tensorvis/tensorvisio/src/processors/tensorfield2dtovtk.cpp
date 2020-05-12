@@ -36,6 +36,7 @@
 #include <vtkPoints.h>
 #include <vtkPointData.h>
 #include <vtkDoubleArray.h>
+#include <vtkAOSDataArrayTemplate.h>
 #include <warn/pop>
 
 #include <inviwo/tensorvisbase/util/misc.h>
@@ -82,7 +83,8 @@ void TensorField2DToVTK::process() {
 
     auto pointData = structuredGrid->GetPointData();
 
-    auto tensorArray = vtkSmartPointer<vtkDoubleArray>::New();
+    auto tensorArray =
+        vtkSmartPointer<vtkAOSDataArrayTemplate<typename TensorField2D::value_type>>::New();
     tensorArray->SetNumberOfComponents(4);
     tensorArray->SetNumberOfTuples(tensors.size());
 
@@ -92,9 +94,32 @@ void TensorField2DToVTK::process() {
     tensorArray->SetComponentName(3, "yy");
     tensorArray->SetName("Tensors");
 
-    std::memcpy(tensorArray->GetPointer(0), tensors.data(), sizeof(double) * 4 * tensors.size());
+    std::memcpy(tensorArray->GetPointer(0), tensors.data(),
+                sizeof(typename TensorField2D::matN) * tensors.size());
 
-    pointData->SetTensors(tensorArray);
+    pointData->AddArray(tensorArray);
+
+    if (auto eigenvectorColumn = tensorField->getMetaData<attributes::MajorEigenVector2D>()) {
+        auto typedColumn =
+            std::dynamic_pointer_cast<const TemplateColumn<typename TensorField2D::vecN>>(
+                *eigenvectorColumn);
+
+        const auto dataPointer =
+            typedColumn->getTypedBuffer()->getRAMRepresentation()->getDataContainer().data();
+
+        auto eigenvectorArray =
+            vtkSmartPointer<vtkAOSDataArrayTemplate<typename TensorField2D::value_type>>::New();
+        eigenvectorArray->SetNumberOfComponents(2);
+        eigenvectorArray->SetNumberOfTuples(tensors.size());
+        eigenvectorArray->SetComponentName(0, "x");
+        eigenvectorArray->SetComponentName(1, "y");
+        eigenvectorArray->SetName("Eigenvectors");
+
+        std::memcpy(eigenvectorArray->GetPointer(0), dataPointer,
+                    sizeof(typename TensorField2D::vecN) * tensors.size());
+
+        pointData->AddArray(eigenvectorArray);
+    }
 
     vtkDataSetOutport_.setData(std::make_shared<VTKDataSet>(structuredGrid));
 }
